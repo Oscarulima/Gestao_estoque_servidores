@@ -1,8 +1,4 @@
-# Sistema de Gestão de Estoque de Servidores
 
-Aplicativo desktop em Python com interface gráfica moderna no estilo Windows 11 para cadastro, consulta e controle de estoque de servidores, chassi e componentes internos.
-
----
 
 ## 📋 Manual do Usuário
 
