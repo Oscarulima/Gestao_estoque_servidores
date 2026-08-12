@@ -1,0 +1,11 @@
+# Ignora arquivos de banco de dados SQLite locais
+*.db
+*.sqlite
+*.sqlite3
+
+# Ignora pastas de compilação do PyInstaller e Python
+dist/
+build/
+*.spec
+__pycache__/
+.vscode/
