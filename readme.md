@@ -31,7 +31,7 @@
 
 ### 3. Edição de Servidores
 1. Na aba **Consultar / Filtrar**, selecione o servidor desejado.
-2. Clique no botão **`✏️ Editar Servidor`**.
+2. Clique no botão **` Editar Servidor`**.
 3. O sistema carregará todos os dados de volta para a tela de cadastro e alterará o botão para **Atualizar Servidor**.
 4. Faça as alterações necessárias e clique em **Atualizar Servidor**.
 
