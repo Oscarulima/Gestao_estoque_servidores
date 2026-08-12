@@ -1,6 +1,6 @@
 
 
-## 📋 Manual do Usuário
+##  Manual do Usuário
 
 ### 1. Cadastro de Servidores e Peças
 1. Acesse a aba **Cadastrar / Editar**.
@@ -44,7 +44,7 @@
 
 ---
 
-## ⚡ Dicas Rápidas
+## Dicas Rápidas
 * **Navegação rápida:** Preencha os campos e use **`TAB`** para ir para o próximo campo e rolar a tela automaticamente.
 * **Bloqueio de duplicidade:** O sistema impede o cadastro de dois servidores com o mesmo Serial Number/Tag.
 * **Limpar formulário:** Clique em **Limpar Formulário** para resetar os campos antes de cadastrar uma nova máquina.
