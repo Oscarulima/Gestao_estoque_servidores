@@ -21,11 +21,24 @@ class DBManager:
                     qtd_baias TEXT,
                     tipo_slot TEXT,
                     tem_trilho TEXT,
+                    tem_bezel TEXT,
                     modulo_gerenciamento TEXT,
                     observacoes TEXT,
                     data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             """)
+
+            novas_colunas = [
+                ("qtd_baias", "TEXT"),
+                ("tem_bezel", "TEXT"),
+                ("modulo_gerenciamento", "TEXT")
+            ]
+            for col, tipo in novas_colunas:
+                try:
+                    cursor.execute(f"ALTER TABLE servidores ADD COLUMN {col} {tipo}")
+                except sqlite3.OperationalError:
+                    pass
+
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS componentes (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -43,8 +56,10 @@ class DBManager:
         with self.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute("""
-                INSERT INTO servidores (serial_number, marca, modelo, fator_forma, qtd_baias, tipo_slot, tem_trilho, modulo_gerenciamento, observacoes)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO servidores (
+                    serial_number, marca, modelo, fator_forma, qtd_baias, 
+                    tipo_slot, tem_trilho, tem_bezel, modulo_gerenciamento, observacoes
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, dados_servidor)
             
             servidor_id = cursor.lastrowid
@@ -62,7 +77,8 @@ class DBManager:
             cursor = conn.cursor()
             cursor.execute("""
                 UPDATE servidores 
-                SET serial_number=?, marca=?, modelo=?, fator_forma=?, qtd_baias=?, tipo_slot=?, tem_trilho=?, modulo_gerenciamento=?, observacoes=?
+                SET serial_number=?, marca=?, modelo=?, fator_forma=?, qtd_baias=?, 
+                    tipo_slot=?, tem_trilho=?, tem_bezel=?, modulo_gerenciamento=?, observacoes=?
                 WHERE id=?
             """, (*dados_servidor, servidor_id))
 
@@ -79,14 +95,14 @@ class DBManager:
     def listar_servidores(self):
         with self.get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT id, serial_number, marca, modelo, fator_forma, tipo_slot, tem_trilho FROM servidores ORDER BY id DESC")
+            cursor.execute("SELECT id, serial_number, marca, modelo, fator_forma, tipo_slot, tem_trilho, tem_bezel FROM servidores ORDER BY id DESC")
             return cursor.fetchall()
 
     def obter_servidor_completo_por_id(self, servidor_id):
         with self.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT id, serial_number, marca, modelo, fator_forma, qtd_baias, tipo_slot, tem_trilho, modulo_gerenciamento, observacoes
+                SELECT id, serial_number, marca, modelo, fator_forma, qtd_baias, tipo_slot, tem_trilho, tem_bezel, modulo_gerenciamento, observacoes
                 FROM servidores WHERE id=?
             """, (servidor_id,))
             servidor = cursor.fetchone()
@@ -103,7 +119,8 @@ class DBManager:
         with self.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT s.serial_number, s.marca, s.modelo, s.fator_forma, s.qtd_baias, s.tipo_slot, s.tem_trilho, s.modulo_gerenciamento, s.observacoes,
+                SELECT s.serial_number, s.marca, s.modelo, s.fator_forma, s.qtd_baias, s.tipo_slot, 
+                       s.tem_trilho, s.tem_bezel, s.modulo_gerenciamento, s.observacoes,
                        c.tipo_componente, c.quantidade, c.part_number, c.detalhes_extras
                 FROM servidores s
                 LEFT JOIN componentes c ON s.id = c.servidor_id
