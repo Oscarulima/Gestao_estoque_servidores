@@ -115,25 +115,16 @@ class AppEstoque(ctk.CTk):
         if marca_selecionada in sugestoes and not self.txt_mgmt.get():
             self.txt_mgmt.insert(0, sugestoes[marca_selecionada])
 
-    # Adiciona linha para cadastro de peça
     def adicionar_linha_componente(self, tipo="", qtd="1", pn="", desc=""):
         row = ctk.CTkFrame(self.frame_pecas)
         row.pack(fill="x", pady=2)
 
-        # Sugestões para AutoFill de Peças
-        opcoes_pecas = [
-            "Placa Mãe", "Placa de Rede", "Placa HBA", "Fonte de Energia", 
-            "Fan / Cooler", "Dissipador", "Controladora RAID", "Riser Card", 
-            "Memória RAM", "Processador (CPU)", "Disco / SSD / HD", 
-            "Bateria RAID / Cache", "Airflow / Duto", "Cabo Mini-SAS / Slimline"
-        ]
+        # Nome da peça pré-preenchido (editável se quiser)
+        txt_tipo = ctk.CTkEntry(row, placeholder_text="Tipo de Peça", width=180)
+        txt_tipo.insert(0, tipo)
+        txt_tipo.pack(side="left", padx=2)
 
-        # ComboBox editável que aceita digitação e sugere opções
-        combo_tipo = ctk.CTkComboBox(row, values=opcoes_pecas, width=160)
-        combo_tipo.set(tipo if tipo else "Selecione ou digite...")
-        combo_tipo.pack(side="left", padx=2)
-
-        txt_qtd = ctk.CTkEntry(row, placeholder_text="Qtd", width=60)
+        txt_qtd = ctk.CTkEntry(row, placeholder_text="Qtd", width=50)
         txt_qtd.insert(0, str(qtd))
         txt_qtd.pack(side="left", padx=2)
 
@@ -148,14 +139,31 @@ class AppEstoque(ctk.CTk):
         btn_remover = ctk.CTkButton(row, text="X", width=30, fg_color="red", command=lambda: self.remover_linha_componente(row))
         btn_remover.pack(side="right", padx=2)
 
-        # Mapeamento dos elementos da linha
         self.linhas_componentes.append({
             "frame": row, 
-            "tipo": combo_tipo, 
+            "tipo": txt_tipo, 
             "qtd": txt_qtd, 
             "pn": txt_pn, 
             "desc": txt_desc
         })
+
+    # Carrega automaticamente APENAS as peças internas que acompanham o chassis
+    def adicionar_componentes_padrao(self):
+        pecas_padrao = [
+            "Placa Mãe",
+            "Heatsink / Dissipador",
+            "Fans / Coolers",
+            "Riser Cards",
+            "Controladora RAID",
+            "Bateria / Cache RAID",
+            "Cabos RAID / Controladora",
+            "Backplane",
+            "Cabos do Backplane",
+            "Placa de Rede",
+            "Airflow / Duto"
+        ]
+        for peca in pecas_padrao:
+            self.adicionar_linha_componente(tipo=peca, qtd="1")
 
     # Remova a chamada do método antigo e substitua por esta versão limpa:
     def adicionar_componentes_padrao(self):
