@@ -7,6 +7,125 @@ from services.export_service import exportar_para_csv
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
 
+# Base Completa de Modelos e Famílias por Fabricante
+BASE_MODELOS = {
+    "IBM": [
+        "x3550 (7978)", "x3650 (7979)", "x3755 (8877)", "x3850 M2", "x3950 E",
+        "x3200 (4362)", "x3250 (4364)", "x3400 (7973)", "x3500 (7977)",
+        "x3550 M2", "x3650 M2", "x3755 M2", "x3850 X5", "x3200 M2", "x3250 M2", "x3400 M2", "x3500 M2",
+        "x3550 M3", "x3650 M3", "x3755 M3", "x3850 X5", "x3950 X5", "x3200 M3", "x3250 M3", "x3400 M3", "x3500 M3",
+        "x3530 M4", "x3550 M4", "x3630 M4", "x3650 M4", "x3750 M4", "x3850 X6", "x3950 X6",
+        "x3100 M4", "x3250 M4", "x3300 M4", "x3500 M4",
+        "x3550 M5", "x3650 M5", "x3850 X6", "x3950 X6", "x3100 M5", "x3250 M5", "x3500 M5"
+    ],
+    "Lenovo": [
+        "System x3550 M5", "System x3650 M5", "System x3850 X6", "System x3950 X6", "NeXtScale nx360 M5",
+        "x3550 M5", "x3650 M5", "x3850 X6",
+        "TS130", "TS140", "TS150", "TS430", "TS440", "TS460", "TD340", "TD350",
+        "RS140", "RS160", "RD330", "RD340", "RD350", "RD430", "RD440", "RD450", "RD530", "RD540", "RD550", "RD630", "RD640", "RD650",
+        "SR530", "SR550", "SR570", "SR590", "SR630", "SR650", "SR850", "SR860", "SR950",
+        "SR635", "SR655", "SR645", "SR665", "ST50", "ST250", "ST550", "SN550", "SN850", "SD530",
+        "SR630 V2", "SR650 V2", "SR670 V2", "SR850 V2", "SR860 V2", "SR645 V2", "SR665 V2",
+        "ST50 V2", "ST250 V2", "ST650 V2",
+        "SR630 V3", "SR650 V3", "SR670 V3", "SR850 V3", "SR860 V3",
+        "SR635 V3", "SR655 V3", "SR645 V3", "SR665 V3", "SR675 V3", "ST50 V3", "ST250 V3", "ST650 V3"
+    ],
+    "Dell": [
+        "PowerEdge R200", "PowerEdge R300", "PowerEdge R805", "PowerEdge R900", "PowerEdge T100", "PowerEdge T300", "PowerEdge T605",
+        "PowerEdge R210", "PowerEdge R310", "PowerEdge R410", "PowerEdge R510", "PowerEdge R610", "PowerEdge R710", "PowerEdge R810", "PowerEdge R910",
+        "PowerEdge R415", "PowerEdge R515", "PowerEdge R715", "PowerEdge R815",
+        "PowerEdge R220", "PowerEdge R320", "PowerEdge R420", "PowerEdge R520", "PowerEdge R620", "PowerEdge R720", "PowerEdge R720xd", "PowerEdge R820", "PowerEdge R920",
+        "PowerEdge R230", "PowerEdge R330", "PowerEdge R430", "PowerEdge R530", "PowerEdge R630", "PowerEdge R730", "PowerEdge R730xd", "PowerEdge R830", "PowerEdge R930",
+        "PowerEdge R240", "PowerEdge R340", "PowerEdge R440", "PowerEdge R540", "PowerEdge R640", "PowerEdge R740", "PowerEdge R740xd", "PowerEdge R840", "PowerEdge R940",
+        "PowerEdge R6415", "PowerEdge R7415", "PowerEdge R7425",
+        "PowerEdge R250", "PowerEdge R350", "PowerEdge R450", "PowerEdge R550", "PowerEdge R650", "PowerEdge R650xs", "PowerEdge R750", "PowerEdge R750xs", "PowerEdge R750xa", "PowerEdge R850", "PowerEdge R950",
+        "PowerEdge R6515", "PowerEdge R6525", "PowerEdge R7515", "PowerEdge R7525",
+        "PowerEdge R260", "PowerEdge R360", "PowerEdge R660", "PowerEdge R660xs", "PowerEdge R760", "PowerEdge R760xs", "PowerEdge R760xa", "PowerEdge R760xd2", "PowerEdge R860", "PowerEdge R960",
+        "PowerEdge R6615", "PowerEdge R6625", "PowerEdge R7615", "PowerEdge R7625", "PowerEdge R9675",
+        "R210", "R310", "R410", "R510", "R610", "R710", "R320", "R420", "R520", "R620", "R720", "R720xd",
+        "R330", "R430", "R530", "R630", "R730", "R730xd", "R440", "R540", "R640", "R740", "R740xd", "R650", "R750"
+    ],
+    "HPE": [
+        "ProLiant DL160 Gen8", "ProLiant DL320e Gen8", "ProLiant DL360e Gen8", "ProLiant DL360p Gen8", "ProLiant DL380e Gen8", "ProLiant DL380p Gen8", "ProLiant DL560 Gen8", "ProLiant DL385p Gen8", "ProLiant DL585 Gen8",
+        "ProLiant ML310e Gen8", "ProLiant ML350e Gen8", "ProLiant ML350p Gen8", "MicroServer Gen8",
+        "ProLiant DL20 Gen9", "ProLiant DL60 Gen9", "ProLiant DL80 Gen9", "ProLiant DL120 Gen9", "ProLiant DL160 Gen9", "ProLiant DL180 Gen9", "ProLiant DL360 Gen9", "ProLiant DL380 Gen9", "ProLiant DL560 Gen9", "ProLiant DL580 Gen9", "ProLiant DL385 Gen9",
+        "ProLiant ML10 Gen9", "ProLiant ML35 Gen9", "ProLiant ML110 Gen9", "ProLiant ML150 Gen9", "ProLiant ML350 Gen9",
+        "ProLiant DL20 Gen10", "ProLiant DL160 Gen10", "ProLiant DL180 Gen10", "ProLiant DL360 Gen10", "ProLiant DL380 Gen10", "ProLiant DL560 Gen10", "ProLiant DL580 Gen10",
+        "ProLiant DL325 Gen10", "ProLiant DL385 Gen10", "ProLiant DL345 Gen10", "ProLiant ML30 Gen10", "ProLiant ML110 Gen10", "ProLiant ML350 Gen10", "MicroServer Gen10",
+        "DL360 Gen9", "DL380 Gen9", "DL360 Gen10", "DL380 Gen10", "DL360 Gen10 Plus", "DL380 Gen10 Plus", "DL360 Gen11", "DL380 Gen11"
+    ],
+    "Supermicro": [
+        "SuperServer 1U Rack", "SuperServer 2U Rack", "SuperServer 3U Rack", "SuperServer 4U Rack",
+        "BigTwin 2U 4-Node", "FatTwin 4U", "SuperBlade", "Ultra SuperServer"
+    ]
+}
+
+# Classe auxiliar para criar o Autocompletar Inline inteligente
+class AutoCompleteEntry(ctk.CTkEntry):
+    def __init__(self, master, lista_sugestoes=None, callback_selecao=None, **kwargs):
+        super().__init__(master, **kwargs)
+        self.lista_sugestoes = lista_sugestoes or []
+        self.callback_selecao = callback_selecao
+        self.sugestoes_atuais = []
+        self.index_sugestao = 0
+
+        self.bind("<KeyRelease>", self.ao_digitar)
+        self.bind("<Down>", self.proxima_sugestao)
+        self.bind("<Up>", self.sugestao_anterior)
+
+    def atualizar_lista_sugestoes(self, nova_lista):
+        self.lista_sugestoes = nova_lista
+
+    def ao_digitar(self, event):
+        # Ignora teclas de navegação para não estragar a seleção do usuário
+        if event.keysym in ["BackSpace", "Left", "Right", "Up", "Down", "Tab", "Return", "Shift_L", "Shift_R"]:
+            return
+
+        texto_digitado = self.get()
+        if not texto_digitado:
+            return
+
+        # Filtra os itens da lista que começam com o que foi digitado (ignorando maiúsculas/minúsculas)
+        self.sugestoes_atuais = [
+            item for item in self.lista_sugestoes 
+            if item.lower().startswith(texto_digitado.lower())
+        ]
+
+        if self.sugestoes_atuais:
+            self.index_sugestao = 0
+            self.aplicar_sugestao(texto_digitado, self.sugestoes_atuais[0])
+
+    def aplicar_sugestao(self, texto_original, sugestao_completa):
+        self.delete(0, "end")
+        self.insert(0, sugestao_completa)
+        
+        # Mantém apenas a parte sugerida selecionada (efeito visual azul do Windows)
+        inicio_selecao = len(texto_original)
+        fim_selecao = len(sugestao_completa)
+        self._entry.select_range(inicio_selecao, fim_selecao)
+        self._entry.icursor(inicio_selecao)
+
+        if self.callback_selecao:
+            self.callback_selecao(sugestao_completa)
+
+    def proxima_sugestao(self, event):
+        if self.sugestoes_atuais:
+            self.index_sugestao = (self.index_sugestao + 1) % len(self.sugestoes_atuais)
+            # Pega o texto que o usuário realmente digitou antes da seleção
+            pos_cursor = self._entry.index("insert")
+            texto_base = self.get()[:pos_cursor]
+            self.aplicar_sugestao(texto_base, self.sugestoes_atuais[self.index_sugestao])
+        return "break"
+
+    def sugestao_anterior(self, event):
+        if self.sugestoes_atuais:
+            self.index_sugestao = (self.index_sugestao - 1) % len(self.sugestoes_atuais)
+            pos_cursor = self._entry.index("insert")
+            texto_base = self.get()[:pos_cursor]
+            self.aplicar_sugestao(texto_base, self.sugestoes_atuais[self.index_sugestao])
+        return "break"
+
+
 class AppEstoque(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -17,7 +136,6 @@ class AppEstoque(ctk.CTk):
         self.servidor_em_edicao_id = None
         self.linhas_componentes = []
 
-        # Sistema de Abas
         self.tabview = ctk.CTkTabview(self)
         self.tabview.pack(fill="both", expand=True, padx=10, pady=10)
 
@@ -27,30 +145,30 @@ class AppEstoque(ctk.CTk):
         self.setup_tab_cadastro()
         self.setup_tab_consulta()
 
-        # Rola a tela automaticamente quando o cursor avança via teclado (Tab)
         self.bind_all("<FocusIn>", self.auto_scroll_ao_focar)
 
-    # ==================== ABA 1: CADASTRO / EDIÇÃO ====================
     def setup_tab_cadastro(self):
         self.scroll_cad = ctk.CTkScrollableFrame(self.tab_cadastro)
         self.scroll_cad.pack(fill="both", expand=True, padx=5, pady=5)
 
-        # Informações Principais
         ctk.CTkLabel(self.scroll_cad, text="Informações do Servidor", font=("Arial", 16, "bold")).pack(anchor="w", pady=(10, 5))
 
         self.txt_serial = self.add_field("Serial Number / Service Tag *")
         
+        # Campo Marca com Autocompletar Inline
         ctk.CTkLabel(self.scroll_cad, text="Marca *").pack(anchor="w", pady=(5, 0))
-        self.combo_marca = ctk.CTkComboBox(
+        self.txt_marca = AutoCompleteEntry(
             self.scroll_cad, 
-            values=["Lenovo", "Dell", "HPE", "IBM", "Supermicro", "Outro"], 
-            command=self.aplicar_autofill_marca
+            lista_sugestoes=list(BASE_MODELOS.keys()) + ["Supermicro", "IBM"],
+            callback_selecao=self.ao_alterar_marca
         )
-        self.combo_marca.pack(fill="x", pady=2)
+        self.txt_marca.pack(fill="x", pady=2)
 
-        self.txt_modelo = self.add_field("Modelo (ex: x3650 M5, PowerEdge R740) *")
+        # Campo Modelo com Autocompletar Inline (Filtra apenas modelos da marca escolhida)
+        ctk.CTkLabel(self.scroll_cad, text="Modelo *").pack(anchor="w", pady=(5, 0))
+        self.txt_modelo = AutoCompleteEntry(self.scroll_cad, lista_sugestoes=[])
+        self.txt_modelo.pack(fill="x", pady=2)
 
-        # Fator de Forma e Quantidade de Baias
         frame_baias = ctk.CTkFrame(self.scroll_cad)
         frame_baias.pack(fill="x", pady=5)
 
@@ -66,12 +184,10 @@ class AppEstoque(ctk.CTk):
         self.txt_qtd_baias = ctk.CTkEntry(f2, placeholder_text="ex: 8, 12, 24")
         self.txt_qtd_baias.pack(fill="x", pady=2)
 
-        # Tipo de Slot / Backplane
         ctk.CTkLabel(self.scroll_cad, text="Tipo de Slot / Backplane").pack(anchor="w", pady=(5, 0))
         self.combo_slot = ctk.CTkComboBox(self.scroll_cad, values=["SAS/SATA", "SOMENTE SATA", "NVMe", "Baia Universal (SAS/SATA/NVMe)", "Outro"])
         self.combo_slot.pack(fill="x", pady=2)
 
-        # Trilho e Bezel Lado a Lado
         frame_acessorios = ctk.CTkFrame(self.scroll_cad)
         frame_acessorios.pack(fill="x", pady=5)
 
@@ -89,7 +205,6 @@ class AppEstoque(ctk.CTk):
 
         self.txt_mgmt = self.add_field("Módulo de Gerenciamento & Licença (ex: iDRAC Enterprise)")
 
-        # Peças e Componentes Internos
         ctk.CTkLabel(self.scroll_cad, text="Peças e Componentes Internos", font=("Arial", 16, "bold")).pack(anchor="w", pady=(20, 5))
 
         self.frame_pecas = ctk.CTkFrame(self.scroll_cad)
@@ -98,12 +213,10 @@ class AppEstoque(ctk.CTk):
         btn_add_peca = ctk.CTkButton(self.scroll_cad, text="+ Adicionar Peça Extra", command=self.adicionar_linha_componente, fg_color="gray")
         btn_add_peca.pack(anchor="w", pady=5)
 
-        # Observações
         ctk.CTkLabel(self.scroll_cad, text="Observações (Avarias, detalhes físicos)").pack(anchor="w", pady=(10, 0))
         self.txt_obs = ctk.CTkTextbox(self.scroll_cad, height=70)
         self.txt_obs.pack(fill="x", pady=5)
 
-        # Botões de Ação
         frame_acoes = ctk.CTkFrame(self.scroll_cad)
         frame_acoes.pack(fill="x", pady=20)
 
@@ -121,15 +234,31 @@ class AppEstoque(ctk.CTk):
         entry.pack(fill="x", pady=2)
         return entry
 
-    def aplicar_autofill_marca(self, marca_selecionada):
-        sugestoes = {
+    # Atualiza as sugestões de modelo e o gerenciamento ao selecionar/digitar a Marca
+    def ao_alterar_marca(self, marca_selecionada):
+        marca_limpa = marca_selecionada.strip()
+        
+        # Procura se a marca digitada existe no dicionário
+        marca_encontrada = None
+        for key in BASE_MODELOS.keys():
+            if key.lower() == marca_limpa.lower():
+                marca_encontrada = key
+                break
+
+        if marca_encontrada:
+            # Carrega a lista exclusiva dessa marca para o campo de Modelo
+            self.txt_modelo.atualizar_lista_sugestoes(BASE_MODELOS[marca_encontrada])
+        else:
+            self.txt_modelo.atualizar_lista_sugestoes([])
+
+        sugestoes_mgmt = {
             "Lenovo": "XClarity Controller (XCC) Enterprise",
             "Dell": "iDRAC9 Enterprise",
             "HPE": "iLO 5 Advanced",
             "IBM": "IMM2 Advanced"
         }
-        if marca_selecionada in sugestoes and not self.txt_mgmt.get():
-            self.txt_mgmt.insert(0, sugestoes[marca_selecionada])
+        if marca_encontrada in sugestoes_mgmt and not self.txt_mgmt.get():
+            self.txt_mgmt.insert(0, sugestoes_mgmt[marca_encontrada])
 
     def adicionar_linha_componente(self, tipo="", qtd="1", pn="", desc=""):
         row = ctk.CTkFrame(self.frame_pecas)
@@ -204,7 +333,6 @@ class AppEstoque(ctk.CTk):
         except Exception:
             pass
 
-    # ==================== ABA 2: CONSULTA / FILTRO / VISUALIZAÇÃO / EDIÇÃO ====================
     def setup_tab_consulta(self):
         frame_filtro = ctk.CTkFrame(self.tab_consulta)
         frame_filtro.pack(fill="x", padx=5, pady=5)
@@ -212,7 +340,7 @@ class AppEstoque(ctk.CTk):
         ctk.CTkLabel(frame_filtro, text="Filtrar por Marca:").pack(side="left", padx=5)
         self.combo_filtro_marca = ctk.CTkComboBox(
             frame_filtro, 
-            values=["Todas", "Lenovo", "Dell", "HPE", "IBM", "Supermicro"], 
+            values=["Todas", "IBM", "Lenovo", "Dell", "HPE", "Supermicro"], 
             command=self.carregar_tabela_consulta
         )
         self.combo_filtro_marca.pack(side="left", padx=5)
@@ -262,7 +390,6 @@ class AppEstoque(ctk.CTk):
                 self.tree.insert("", "end", values=(s_id, serial, marca, modelo, fator, trilho, bezel))
 
     def visualizar_detalhes_servidor(self):
-        """Abre a ficha técnica em um campo de texto selecionável com botão de cópia rápida"""
         selected = self.tree.selection()
         if not selected:
             messagebox.showwarning("Seleção", "Selecione um servidor na lista para visualizar os detalhes!")
@@ -281,7 +408,6 @@ class AppEstoque(ctk.CTk):
         win.geometry("750x650")
         win.grab_set()
 
-        # Monta todo o texto da ficha para exibição e cópia
         texto_completo = []
         texto_completo.append(f"SERVIDOR: {servidor[2]} {servidor[3]}\n" + "="*45)
         texto_completo.append(f"• Serial Number / Tag: {servidor[1]}")
@@ -299,7 +425,6 @@ class AppEstoque(ctk.CTk):
         
         if componentes:
             for c in componentes:
-                # c = (tipo_componente, part_number, quantidade, detalhes_extras)
                 linha_peca = f"• [{c[0]}] Qtd: {c[2]} | PN: {c[1] or 'N/A'}"
                 if c[3]:
                     linha_peca += f" | Obs: {c[3]}"
@@ -309,16 +434,13 @@ class AppEstoque(ctk.CTk):
 
         conteudo_final = "\n".join(texto_completo)
 
-        # Caixa de texto onde tudo pode ser selecionado e copiado manualmente (Ctrl+A -> Ctrl+C)
         box_texto = ctk.CTkTextbox(win, font=("Consolas", 12))
         box_texto.pack(fill="both", expand=True, padx=15, pady=(15, 5))
         box_texto.insert("1.0", conteudo_final)
 
-        # Frame com os botões de ação
         frame_botoes = ctk.CTkFrame(win)
         frame_botoes.pack(fill="x", padx=15, pady=10)
 
-        # Função interna do botão de copiar
         def copiar_texto():
             self.clipboard_clear()
             self.clipboard_append(conteudo_final)
@@ -337,6 +459,7 @@ class AppEstoque(ctk.CTk):
             command=win.destroy, 
             fg_color="gray"
         ).pack(side="right", padx=5, expand=True)
+
     def carregar_servidor_para_edicao(self):
         selected = self.tree.selection()
         if not selected:
@@ -355,8 +478,15 @@ class AppEstoque(ctk.CTk):
         self.servidor_em_edicao_id = servidor_id
 
         self.txt_serial.insert(0, servidor[1])
-        self.combo_marca.set(servidor[2])
+        
+        # Preenche marca e modelo
+        self.txt_marca.delete(0, 'end')
+        self.txt_marca.insert(0, servidor[2])
+        self.ao_alterar_marca(servidor[2])
+
+        self.txt_modelo.delete(0, 'end')
         self.txt_modelo.insert(0, servidor[3])
+
         self.combo_fator.set(servidor[4] if servidor[4] else "")
         self.txt_qtd_baias.insert(0, servidor[5] if servidor[5] else "")
         self.combo_slot.set(servidor[6] if servidor[6] else "")
@@ -378,10 +508,9 @@ class AppEstoque(ctk.CTk):
         self.tabview.set("Cadastrar / Editar")
         messagebox.showinfo("Modo Edição", f"Servidor {servidor[1]} carregado para alteração!")
 
-    # ==================== SALVAR / LIMPAR ====================
     def salvar_cadastro(self):
         serial = self.txt_serial.get().strip()
-        marca = self.combo_marca.get().strip()
+        marca = self.txt_marca.get().strip()
         modelo = self.txt_modelo.get().strip()
 
         if not serial or not marca or not modelo:
@@ -434,6 +563,7 @@ class AppEstoque(ctk.CTk):
     def limpar_formularios(self):
         self.servidor_em_edicao_id = None
         self.txt_serial.delete(0, 'end')
+        self.txt_marca.delete(0, 'end')
         self.txt_modelo.delete(0, 'end')
         self.txt_qtd_baias.delete(0, 'end')
         self.txt_mgmt.delete(0, 'end')

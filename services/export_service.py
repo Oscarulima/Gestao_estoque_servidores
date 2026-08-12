@@ -5,7 +5,6 @@ def exportar_para_csv(db_manager):
     with db_manager.get_connection() as conn:
         cursor = conn.cursor()
         
-        # Puxa todos os servidores cadastrados
         cursor.execute("""
             SELECT id, serial_number, marca, modelo, fator_forma, qtd_baias, 
                    tipo_slot, tem_trilho, tem_bezel, modulo_gerenciamento, observacoes
@@ -27,17 +26,12 @@ def exportar_para_csv(db_manager):
             fator = serv[4] or ""
             baias = serv[5] or ""
             
-            # Monta o nome completo do Server (Ex: ThinkSystem SR630 V2 8x 2.5")
             nome_server = f"{marca} {modelo} {baias} {fator}".strip()
 
-            # 1. Cabeçalho do Bloco do Servidor (Igual ao seu modelo)
             linhas_exportacao.append(["SN", "Server", ""])
             linhas_exportacao.append([sn, nome_server, ""])
-            
-            # 2. Cabeçalho das Peças
             linhas_exportacao.append(["PN", "Descrição", "QTD"])
 
-            # 3. Puxa todas as peças cadastradas para este servidor
             cursor.execute("""
                 SELECT part_number, tipo_componente, detalhes_extras, quantidade
                 FROM componentes WHERE servidor_id = ?
@@ -51,7 +45,6 @@ def exportar_para_csv(db_manager):
                     detalhes = comp[2] or ""
                     qtd = comp[3] or "1"
 
-                    # Monta a descrição unindo Tipo e Detalhes
                     if detalhes:
                         descricao = f"{tipo} - {detalhes}"
                     else:
@@ -61,10 +54,8 @@ def exportar_para_csv(db_manager):
             else:
                 linhas_exportacao.append(["N/A", "Nenhum componente cadastrado", "0"])
 
-            # Adiciona uma linha em branco entre um servidor e outro para separar no Excel
             linhas_exportacao.append(["", "", ""])
 
-    # Seleciona onde salvar o arquivo
     caminho_arquivo = filedialog.asksaveasfilename(
         defaultextension=".csv",
         filetypes=[("Arquivos CSV", "*.csv")],

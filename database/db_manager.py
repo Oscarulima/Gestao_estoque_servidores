@@ -114,15 +114,3 @@ class DBManager:
             componentes = cursor.fetchall()
 
             return servidor, componentes
-
-    def obter_todos_dados_para_exportar(self):
-        with self.get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("""
-                SELECT s.serial_number, s.marca, s.modelo, s.fator_forma, s.qtd_baias, s.tipo_slot, 
-                       s.tem_trilho, s.tem_bezel, s.modulo_gerenciamento, s.observacoes,
-                       c.tipo_componente, c.quantidade, c.part_number, c.detalhes_extras
-                FROM servidores s
-                LEFT JOIN componentes c ON s.id = c.servidor_id
-            """)
-            return cursor.fetchall()
